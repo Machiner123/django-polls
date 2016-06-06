@@ -1,0 +1,19 @@
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<!--form action an important tag, and it takes the url function with name vote in app_name polls
+and it is relevant to the question.id of the relevant question object -->
+<form action="{% url 'polls:vote' question.id %}" method="post">
+<!-- csrf_token is a security feature, since this form's input changes data serverside -->
+{% csrf_token %}
+<!--creates a selectable button for each choice in a question's choise_set. notice the clever way of 
+iding each choice button by a counter in the forloop, also notice value choice.id, which is data that talks
+to the db and tells it which choice object we are talking about. the POST dat alooks like "choice=choice.id"
+the label contains the display data that the user sees with a for loop that creates a label
+with choice.choice_text of the revelant choice object-->
+{% for choice in question.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" /> 
+</form>
